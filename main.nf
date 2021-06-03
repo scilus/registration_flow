@@ -128,9 +128,9 @@ process Register_T1 {
     mv ${sid}__outputWarped.nii.gz ${sid}__t1_transformed.nii.gz
     """
 }
-
-nii_for_transformation
-    .join(transformation_for_nii)
+transformation_for_nii
+    .cross(nii_for_transformation)
+    .map { [ it[0][0], it[0][1], it[1][1] ] }
     .combine(template_for_transformation_nii)
     .set{nii_and_template_for_transformation}
 
@@ -138,7 +138,7 @@ process Transform_NII {
     cpus 1
 
     input:
-    set sid, file(nii), file(transfo), file(template) from nii_and_template_for_transformation
+    set sid, file(transfo), file(nii), file(template) from nii_and_template_for_transformation
 
     output:
     file "*_transformed.nii.gz"
@@ -149,8 +149,9 @@ process Transform_NII {
     """
 }
 
-trk_for_transformation
-    .join(transformation_for_trk)
+transformation_for_trk
+    .cross(trk_for_transformation)
+    .map { [ it[0][0], it[0][1], it[1][1] ] }
     .combine(template_for_transformation_trk)
     .set{trk_and_template_for_transformation}
 
@@ -158,7 +159,7 @@ process Transform_TRK {
     cpus 1
 
     input:
-    set sid, file(trk), file(transfo), file(template) from trk_and_template_for_transformation
+    set sid, file(transfo), file(trk), file(template) from trk_and_template_for_transformation
 
     output:
     file "*_transformed.trk"
