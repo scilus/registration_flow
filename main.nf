@@ -55,8 +55,8 @@ root = file(params.input)
 Channel.fromPath(file(params.template))
     .into {template_for_registration; template_for_transformation_nii; template_for_transformation_trk}
 
-trk_for_transformation = Channel
-    .fromFilePairs("$root/**/*.trk",
+tractogram_for_transformation = Channel
+    .fromFilePairs("$root/**/*{.tck,.trk}",
                    size:-1,
                    maxDepth:1,
                    flat: true) {it.parent.name}
@@ -120,7 +120,7 @@ process Register_T1 {
     set sid, file(t1), file(template) from t1_and_template_for_registration
 
     output:
-    set sid, "${sid}__output0GenericAffine.mat"  into transformation_for_nii, transformation_for_trk
+    set sid, "${sid}__output0GenericAffine.mat"  into transformation_for_nii, transformation_for_tractogram
     file "${sid}__t1_transformed.nii.gz"
     script:
     """
@@ -149,23 +149,23 @@ process Transform_NII {
     """
 }
 
-transformation_for_trk
-    .cross(trk_for_transformation)
+transformation_for_tractogram
+    .cross(tractogram_for_transformation)
     .map { [ it[0][0], it[0][1], it[1][1] ] }
     .combine(template_for_transformation_trk)
-    .set{trk_and_template_for_transformation}
+    .set{tractogram_and_template_for_transformation}
 
-process Transform_TRK {
+process Transform_Tractogram {
     cpus 1
 
     input:
-    set sid, file(transfo), file(trk), file(template) from trk_and_template_for_transformation
+    set sid, file(transfo), file(tractogram), file(template) from tractogram_and_template_for_transformation
 
     output:
     file "*_transformed.trk"
 
     script:
     """
-    scil_apply_transform_to_tractogram.py $trk $template $transfo ${trk.getSimpleName()}_transformed.trk --remove_invalid --inverse
+    scil_apply_transform_to_tractogram.py $tractogram $template $transfo ${trk.getSimpleName()}_transformed.trk --remove_invalid --inverse --reference $template
     """
 }
