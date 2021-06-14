@@ -17,7 +17,7 @@ if(params.help) {
 }
 
 log.info "Registration pipeline"
-log.info "==================="
+log.info "====================="
 log.info ""
 log.info "Start time: $workflow.start"
 log.info ""
