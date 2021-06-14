@@ -16,15 +16,17 @@ DESCRIPTION
                                         ├── S1
                                         |   ├── *t1.nii.gz
                                         |   ├── *.nii.gz
+                                        |   ├── *.tck
                                         |   └── *.trk
                                         └── S2
                                             ├── *t1.nii.gz
                                             ├── *.nii.gz
+                                            ├── *.tck
                                             └── *.trk
 
     --template=/path/to/[template]      Template used for registration in a common space
 
-Files should be compressed Nifti files (.nii.gz) or TRK tractograms (.trk)
+Files should be compressed Nifti files (.nii.gz) or TRK/TCK tractograms (.trk/.tck)
 
 OPTIONAL ARGUMENTS (current value)
 
