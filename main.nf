@@ -65,14 +65,20 @@ Channel
     .fromPath("$root/**/*.nii.gz",
               maxDepth:1)
     .branch {
-        t1: it =~ "*t1.nii.gz"
+        t1: it =~ "t1.nii.gz"
         other: true
     }
     .set { result }
 
 result.t1
 .map{[it.parent.name, it]}
-.into { t1_for_registration; check_subjects_number }
+.into { t1_for_registration; check_subjects_number; validate_count }
+
+validate_count
+.groupTuple()
+.subscribe { it -> if (it[1].size() != 1)
+    error "Error ~ Multiple `*t1.nii.gz` files found for subject: ${it[0]} \nFiles found: ${it[1]}" }
+
 
 result.other
 .map{[it.parent.name, it]}
