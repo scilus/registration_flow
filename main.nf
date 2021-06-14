@@ -53,7 +53,7 @@ if (!params.template){
 root = file(params.input)
 
 Channel.fromPath(file(params.template))
-    .into {template_for_registration; template_for_transformation_nii; template_for_transformation_trk}
+    .into {template_for_registration; template_for_transformation_nii; template_for_transformation_tractogram}
 
 tractogram_for_transformation = Channel
     .fromFilePairs("$root/**/*{.tck,.trk}",
@@ -83,10 +83,6 @@ validate_count
 result.other
 .map{[it.parent.name, it]}
 .set { nii_for_transformation }
-
-t1_for_registration
-    .combine(template_for_registration)
-    .set {t1_and_template_for_registration}
 
 
 check_subjects_number.count().set{ number_subj_for_null_check }
@@ -123,7 +119,8 @@ process Register_T1 {
     cpus params.processes
 
     input:
-    set sid, file(t1), file(template) from t1_and_template_for_registration
+    set sid, file(t1) from t1_for_registration
+    file (template) from template_for_registration
 
     output:
     set sid, "${sid}__output0GenericAffine.mat"  into transformation_for_nii, transformation_for_tractogram
@@ -137,14 +134,14 @@ process Register_T1 {
 transformation_for_nii
     .cross(nii_for_transformation)
     .map { [ it[0][0], it[0][1], it[1][1] ] }
-    .combine(template_for_transformation_nii)
-    .set{nii_and_template_for_transformation}
+    .set{transformation_and_nii}
 
 process Transform_NII {
     cpus 1
 
     input:
-    set sid, file(transfo), file(nii), file(template) from nii_and_template_for_transformation
+    set sid, file(transfo), file(nii) from transformation_and_nii
+    file (template) from template_for_transformation_nii
 
     output:
     file "*_transformed.nii.gz"
@@ -158,14 +155,14 @@ process Transform_NII {
 transformation_for_tractogram
     .cross(tractogram_for_transformation)
     .map { [ it[0][0], it[0][1], it[1][1] ] }
-    .combine(template_for_transformation_trk)
-    .set{tractogram_and_template_for_transformation}
+    .set{transformation_and_tractogram}
 
 process Transform_Tractogram {
     cpus 1
 
     input:
-    set sid, file(transfo), file(tractogram), file(template) from tractogram_and_template_for_transformation
+    set sid, file(transfo), file(tractogram) from transformation_and_tractogram
+    file (template) from template_for_transformation_tractogram
 
     output:
     file "*_transformed.trk"
