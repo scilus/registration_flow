@@ -169,6 +169,6 @@ process Transform_Tractogram {
 
     script:
     """
-    scil_apply_transform_to_tractogram.py $tractogram $template $transfo ${trk.getSimpleName()}_transformed.trk --remove_invalid --inverse --reference $template
+    scil_apply_transform_to_tractogram.py $tractogram $template $transfo ${tractogram.getSimpleName()}_transformed.trk --remove_invalid --inverse --reference $template
     """
 }
