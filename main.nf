@@ -120,7 +120,7 @@ process Register_T1 {
 
     input:
     set sid, file(t1) from t1_for_registration
-    file (template) from template_for_registration
+    file (template) from template_for_registration.first()
 
     output:
     set sid, "${sid}__output0GenericAffine.mat"  into transformation_for_nii, transformation_for_tractogram
@@ -141,7 +141,7 @@ process Transform_NII {
 
     input:
     set sid, file(transfo), file(nii) from transformation_and_nii
-    file (template) from template_for_transformation_nii
+    file (template) from template_for_transformation_nii.first()
 
     output:
     file "*_transformed.nii.gz"
@@ -162,7 +162,7 @@ process Transform_Tractogram {
 
     input:
     set sid, file(transfo), file(tractogram) from transformation_and_tractogram
-    file (template) from template_for_transformation_tractogram
+    file (template) from template_for_transformation_tractogram.first()
 
     output:
     file "*_transformed.trk"
