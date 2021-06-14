@@ -65,7 +65,7 @@ Channel
     .fromPath("$root/**/*.nii.gz",
               maxDepth:1)
     .branch {
-        t1: it =~ "t1.nii.gz"
+        t1: it =~ "*t1.nii.gz"
         other: true
     }
     .set { result }
