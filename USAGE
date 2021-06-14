@@ -36,7 +36,7 @@ OPTIONAL ARGUMENTS (current value)
 --processes                                 The number of parallel processes to launch ($cpu_count).
                                             Only affects the local scheduler.
 
-AVAILABLE PROFILES (using -profile option (e.g. -profile use_cuda,fully_reproducible))
+AVAILABLE PROFILES (using -profile option (e.g. -profile macos))
 
 macos                                       When this profile is used, registration-flow will modify a parameter (scratch) for MacOS users.
 
