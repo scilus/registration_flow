@@ -32,12 +32,8 @@ Docker
 ------
 If you are on MacOS or Windows, we recommend using the Docker container to run registration-flow
 
-Simply add the following to yout `nextflow run` command:
+Simply add the following to your `nextflow run` command:
 `-with-docker scilus/scilus:1.1.0_registrationflow-1.0.0`
-
-
-Prebuilt Docker images are available here:
-[http://scil.usherbrooke.ca/en/containers_list/](http://scil.usherbrooke.ca/en/containers_list/)
 
 
 FOR DEVELOPERS: The containers repository is available here:
