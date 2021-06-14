@@ -25,7 +25,7 @@ Then add the following to your `nextflow run` command:
 
 
 FOR DEVELOPERS: The containers repository is available here:
-[containers-TractoFlow](https://github.com/scilus/containers-tractoflow)
+[Containers-Scilus](https://github.com/scilus/containers-scilus)
 
 
 Docker
@@ -37,7 +37,7 @@ Simply add the following to your `nextflow run` command:
 
 
 FOR DEVELOPERS: The containers repository is available here:
-[containers-TractoFlow](https://github.com/scilus/containers-tractoflow)
+[Containers-Scilus](https://github.com/scilus/containers-scilus)
 
 
 Usage
