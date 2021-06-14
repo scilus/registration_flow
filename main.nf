@@ -87,7 +87,7 @@ check_subjects_number.count().set{ number_subj_for_null_check }
 
 number_subj_for_null_check
 .subscribe{a -> if (a == 0)
-    error "Error ~ No subjects found. Please check the naming convention, your --input path or your BIDS folder."}
+    error "Error ~ No subjects found. Please check the naming convention, your --input path."}
 
 process README {
     cpus 1
